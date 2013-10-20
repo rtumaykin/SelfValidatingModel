@@ -21,7 +21,7 @@ namespace SelfValidatingModel.CascadeValidation
                 "namespace ns_" + Guid.NewGuid().ToString("N") + Lf +
                 "{" + Lf +
                 "    [Serializable]" + Lf +
-                "    internal class CascadeValidator_" + type.Name + " : SelfValidatingModel.ICascadeValidator" + Lf +
+                "    internal class CascadeValidator_" + type.Name + " : SelfValidatingModel.CascadeValidation.ICascadeValidator" + Lf +
                 "    {" + Lf +
                 "        public IDictionary<string, IList<string>> ApplyCascadeValidationRules(SelfValidatingModelBase model)" + Lf +
                 "        {" + Lf +
@@ -92,7 +92,8 @@ namespace SelfValidatingModel.CascadeValidation
                     var _assembly = _results.CompiledAssembly;
                     Type _validatorType =
                         _assembly.DefinedTypes.FirstOrDefault(
-                            info => info.Name.Substring(0, "SubModalValidator_".Length) == "SubModalValidator_");
+                            // I don't think there would be any other types in this assembly, but what if compiler decides to add some?
+                            info => info.Name.Substring(0, "CascadeValidator_".Length) == "CascadeValidator_");
                     if (_validatorType != null)
                     {
                         var _validatorConstructorInfo = _validatorType.GetConstructor(new Type[] { });
