@@ -23,14 +23,13 @@ namespace SelfValidatingModel.CascadeValidation
                 "    [Serializable]" + Lf +
                 "    internal class CascadeValidator_" + type.Name + " : SelfValidatingModel.CascadeValidation.ICascadeValidator" + Lf +
                 "    {" + Lf +
-                "        public IDictionary<string, IList<string>> ApplyCascadeValidationRules(SelfValidatingModelBase model)" + Lf +
+                "        public IDictionary<string, SelfValidatingModelBase> GetSelfValidatingProperties(SelfValidatingModelBase model)" + Lf +
                 "        {" + Lf +
                 "            var _trueModel = model as " + type.Namespace + "." + type.Name + ";" + Lf +
-                "            var returnObject = new Dictionary<string, IList<string>>();" + Lf +
-                "            if (_trueModel != null)" + Lf +
-                "            {" + Lf +
-                "                IDictionary<string, SelfValidatingModelBase> subModels = new Dictionary<string, SelfValidatingModelBase>" + Lf +
-                "                {" + Lf;
+                "            if (_trueModel == null)" + Lf +
+                "                return null;" + Lf +
+                "            return new Dictionary<string, SelfValidatingModelBase>" + Lf +
+                "            {" + Lf;
             var _firstEntry = true;
 
             foreach (var _propertyInfo in type.GetProperties().Where(propertyInfo => propertyInfo.PropertyType.IsSubclassOf(typeof(SelfValidatingModelBase))))
@@ -40,20 +39,11 @@ namespace SelfValidatingModel.CascadeValidation
                 _firstEntry = false;
             }
 
-            _code += Lf + "                };" + Lf +
-                     "                foreach (var subModel in subModels)" + Lf +
-                     "                {" + Lf +
-                     "                    if (subModel.Value != null)" + Lf +
-                     "                        foreach (DictionaryEntry error in subModel.Value.Exception.Data)" + Lf +
-                     "                        {" + Lf +
-                     "                            returnObject.Add(subModel.Key + \".\" + (string)error.Key, (IList<string>)error.Value);" + Lf +
-                     "                        }" + Lf +
-                     "                }" + Lf +
-                     "            }" + Lf +
-                     "            return returnObject;" + Lf +
-                     "        }" + Lf +
-                     "    }" + Lf +
-                     "}";
+            _code += Lf + 
+                "            };" + Lf +
+                "        }" + Lf +
+                "    }" + Lf +
+                "}";
             return _code;
         }
 
@@ -79,7 +69,7 @@ namespace SelfValidatingModel.CascadeValidation
                 GenerateInMemory = true
             };
             _compilerParameters.ReferencedAssemblies.AddRange(_referencedAssemblies);
-
+//            _compilerParameters.TempFiles.KeepFiles = true;
 
             var _providerOptions = new Dictionary<string, string> { { "CompilerVersion", "v4.0" } };
 
@@ -91,7 +81,7 @@ namespace SelfValidatingModel.CascadeValidation
                 {
                     var _assembly = _results.CompiledAssembly;
                     Type _validatorType =
-                        _assembly.DefinedTypes.FirstOrDefault(
+                        _assembly.GetTypes().FirstOrDefault(
                             // I don't think there would be any other types in this assembly, but what if compiler decides to add some?
                             info => info.Name.Substring(0, "CascadeValidator_".Length) == "CascadeValidator_");
                     if (_validatorType != null)

@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7E7660E8-7184-43D2-A92B-8CE87CD3362C}</ProjectGuid>
+    <ProjectGuid>{6D52D099-E897-4574-A8EA-9C5BDFA8A733}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SelfValidatingModel</RootNamespace>
-    <AssemblyName>SelfValidatingModel</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>SelfValidatingModel.Samples</RootNamespace>
+    <AssemblyName>SelfValidatingModel.Samples</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,14 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CascadeValidation\CascadeValidatorCodeFactory.cs" />
-    <Compile Include="CascadeValidation\CascadeValidatorCodeFactoryException.cs" />
-    <Compile Include="CascadeValidation\ICascadeValidator.cs" />
-    <Compile Include="SelfValidatingModelBase.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ValidationException.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SelfValidatingModel\SelfValidatingModel.csproj">
+      <Project>{7E7660E8-7184-43D2-A92B-8CE87CD3362C}</Project>
+      <Name>SelfValidatingModel</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

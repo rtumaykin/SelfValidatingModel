@@ -1,46 +1,9 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using SelfValidatingModel.Samples;
 
 namespace SelfValidatingModel.Test
 {
-    public class SimpleModel : SelfValidatingModelBase
-    {
-        public string Property1 { get; set; }
-
-        public int Property2 { get; set; }
-        
-        protected override void CreateValidationRules()
-        {
-            
-            AddValidationRule("Property1", () => string.IsNullOrWhiteSpace(Property1), () => "Property1 should not be empty");
-            AddValidationRule("Property2", () => Property2 == 0, () => "Property2 must not be 0");
-        }
-    }
-
-    public class SimpleModelWithConstructor : SelfValidatingModelBase
-    {
-        public SimpleModelWithConstructor(string property1) : this()
-        {
-            Property1 = property1;
-        }
-
-
-        protected SimpleModelWithConstructor()
-        {
-
-        }
-
-        public string Property1 { get; set; }
-
-        public int Property2 { get; set; }
-
-        protected override void CreateValidationRules()
-        {
-
-            AddValidationRule("Property1", () => string.IsNullOrWhiteSpace(Property1), () => "Property1 should not be empty");
-            AddValidationRule("Property2", () => Property2 == 0, () => "Property2 must not be 0");
-        }
-    }
 
     [TestFixture]
     public class SelfValidationTests

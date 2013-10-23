@@ -31,8 +31,19 @@ namespace SelfValidatingModel
         private IDictionary<string, IList<string>> ValidateSubModels()
         {
             var _validator = EnsureValidator();
-            var _result = _validator.ApplyCascadeValidationRules(this);
-            return _result;
+            var _result = _validator.GetSelfValidatingProperties(this);
+            var _returnObject = new Dictionary<string, IList<string>>();
+            if (_result != null)
+            {
+                foreach (var _modelBase in _result.Where(model => model.Value != null))
+                {
+                    foreach (var _validationRule in _modelBase.Value.ApplyValidationRules())
+                    {
+                        _returnObject.Add(_modelBase.Key + "." + _validationRule.Key, _validationRule.Value);
+                    }
+                }
+            }
+            return _returnObject;
         }
 
         private ICascadeValidator EnsureValidator()

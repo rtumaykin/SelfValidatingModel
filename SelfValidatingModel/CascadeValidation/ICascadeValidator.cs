@@ -4,6 +4,6 @@ namespace SelfValidatingModel.CascadeValidation
 {
     public interface ICascadeValidator
     {
-        IDictionary<string, IList<string>> ApplyCascadeValidationRules(SelfValidatingModelBase model);
+        IDictionary<string, SelfValidatingModelBase> GetSelfValidatingProperties(SelfValidatingModelBase model);
     }
 }

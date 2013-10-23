@@ -32,10 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Faker">
+      <HintPath>..\packages\faker-csharp.1.1.0\lib\net4\Faker.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RealModels.cs" />
+    <Compile Include="Realtests.cs" />
     <Compile Include="SelfValidationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -51,6 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SelfValidatingModel.Samples\SelfValidatingModel.Samples.csproj">
+      <Project>{6D52D099-E897-4574-A8EA-9C5BDFA8A733}</Project>
+      <Name>SelfValidatingModel.Samples</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SelfValidatingModel\SelfValidatingModel.csproj">
       <Project>{7E7660E8-7184-43D2-A92B-8CE87CD3362C}</Project>
       <Name>SelfValidatingModel</Name>
