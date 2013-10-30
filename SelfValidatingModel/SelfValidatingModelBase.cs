@@ -46,6 +46,10 @@ namespace SelfValidatingModel
             return _returnObject;
         }
 
+        /// <summary>
+        /// Ensures that the validator for this class exists in the static collection. If it does not, then it creates and adds validator to the collection for reuse.
+        /// </summary>
+        /// <returns></returns>
         private ICascadeValidator EnsureValidator()
         {
             ICascadeValidator _subModelValidator;
@@ -67,13 +71,14 @@ namespace SelfValidatingModel
             return _subModelValidator;
         }
 
-        public ValidationException Exception
+        /// <summary>
+        /// Throws a validation error if the model is invalid
+        /// </summary>
+        public void ThrowIfInvalid()
         {
-            get
-            {
-                var _validationErrors = ApplyValidationRules();
-                return _validationErrors != null && _validationErrors.Count == 0 ? null : new ValidationException(_validationErrors);
-            }
+            var _validationErrors = ApplyValidationRules();
+            if (_validationErrors != null && _validationErrors.Count > 0)
+                throw new ValidationException(_validationErrors);
         }
 
         protected SelfValidatingModelBase()
@@ -88,6 +93,9 @@ namespace SelfValidatingModel
             internal Func<string> ErrorMessageMethod { get; set; }
         }
 
+        /// <summary>
+        /// Holds a list of validation rules per public property
+        /// </summary>
         private IDictionary<string, IList<ValidationRule>> validationRules;
         private IDictionary<string, IList<ValidationRule>> ValidationRules
         {
@@ -98,6 +106,12 @@ namespace SelfValidatingModel
             }
         }
 
+        /// <summary>
+        /// Adds a new validation rule to the collection
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <param name="validationMethod">method to perform validation</param>
+        /// <param name="errorMessageMethod">error message that will be returned if validation fails</param>
         protected void AddValidationRule(string propertyName, Func<bool> validationMethod, Func<string> errorMessageMethod)
         {
             if (ValidationRules.ContainsKey(propertyName))
@@ -114,8 +128,15 @@ namespace SelfValidatingModel
             }
         }
 
+        /// <summary>
+        /// Abstract method that needs to be overwritten in each derived class to create the set of validation rules
+        /// </summary>
         protected abstract void CreateValidationRules();
 
+        /// <summary>
+        /// Applies defined validation rules, plus processes all public properties that are also derived from the SelfValidatingModelBase class
+        /// </summary>
+        /// <returns>A dictionary with field name / list of error messages</returns>
         private IDictionary<string, IList<string>> ApplyValidationRules()
         {
             var _returnObject = new Dictionary<string, IList<string>>();
